@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -11,12 +12,15 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $fields = $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:user,email',
-            'password' => 'required',
-        ]);
-
+        try {
+            $fields = $request->validate([
+                'name' => 'required',
+                'email' => 'required|unique:user,email',
+                'password' => 'required',
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
@@ -54,11 +58,5 @@ class AuthController extends Controller
         return response([
             'message' => 'wrong credentials'
         ]);
-    }
-
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-        return response(['message' => 'Logged out']);
     }
 }
