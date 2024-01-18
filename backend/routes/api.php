@@ -25,17 +25,19 @@ use App\Models\User;
 
 //public api
 Route::resource('products', ProductController::class);
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
-// Route::get('/products/search/{name}', [ProductController::class, 'search']);
 
 //protected api
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/products/search/{name}', [
         ProductController::class, 'search'
     ]);
+});
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [AuthController::class, 'getUsers']);
 });

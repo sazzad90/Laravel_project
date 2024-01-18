@@ -23,12 +23,11 @@ export default function Signin() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const message = useSelector((state) => state.auth.value);
   const dispatch = useDispatch();
 
   React.useEffect(()=>{
     if(isLoggedIn == true){
-      navigate('/home', {state: {message}});
+      navigate('/home');
     }
   },[isLoggedIn]);
 

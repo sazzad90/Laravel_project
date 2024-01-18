@@ -28,7 +28,7 @@ export default function Signup() {
 
   React.useEffect(()=>{
     if(isLoggedIn){
-      navigate('/', {state:{message}});
+      navigate('/home');
     }
   },[isLoggedIn])
   const handleSubmit = async (event) => {

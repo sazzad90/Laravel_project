@@ -16,9 +16,12 @@ export const authSlice = createSlice({
       state.value = "Registration successful"
       state.isLoggedIn = actions.payload;
     },
+    reset: (state,actions) => {
+      state.value = actions.payload
+    },
   },
 })
 
-export const { signup, setLoginStatus } = authSlice.actions
+export const { reset, signup, setLoginStatus } = authSlice.actions
 
 export default authSlice.reducer

@@ -23,7 +23,7 @@ function NavigationBar() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const loggedInStatus = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
 
@@ -31,20 +31,13 @@ function NavigationBar() {
     setAnchorElNav(event.currentTarget);
   };
 
-  React.useEffect(()=>{
-    if(isLoggedIn == false){
-      navigate('/');
-    }
-  },[isLoggedIn]);
-
   const handleLogout = async(event) => {
     try {
       localStorage.removeItem('token');
-      const token = localStorage.getItem('token');
-      if(!token){
-        dispatch(setLoginStatus(false));
+      dispatch(setLoginStatus(false));
+      if(!loggedInStatus){
+        navigate('/signin');
       }
-
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
@@ -59,7 +52,7 @@ function NavigationBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
