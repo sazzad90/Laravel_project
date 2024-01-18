@@ -13,25 +13,36 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
+import { setLoginStatus } from "../redux/reducer/reducer";
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function NavigationBar() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
+  React.useEffect(()=>{
+    if(isLoggedIn == false){
+      navigate('/');
+    }
+  },[isLoggedIn]);
+
   const handleLogout = async(event) => {
     try {
       localStorage.removeItem('token');
       const token = localStorage.getItem('token');
       if(!token){
-        console.log('logged out');
-        navigate('/');
+        dispatch(setLoginStatus(false));
       }
 
     } catch (error) {

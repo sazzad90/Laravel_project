@@ -13,14 +13,24 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import store from '../redux/store/store';
-import { signup } from '../redux/action/actionCreator'; 
+
+import { useSelector, useDispatch } from 'react-redux'
+import { signup } from '../redux/reducer/reducer'
 
 const defaultTheme = createTheme();
 
 export default function Signup() {
   const navigate = useNavigate();
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const message = useSelector((state) => state.auth.value);
+  const dispatch = useDispatch();
+
+  React.useEffect(()=>{
+    if(isLoggedIn){
+      navigate('/', {state:{message}});
+    }
+  },[isLoggedIn])
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -46,11 +56,7 @@ export default function Signup() {
     localStorage.setItem('token', token);
 
     if(localStorage.getItem('token')){
-      store.dispatch(signup());
-      const reduxMessage = store.getState().message;
-      if(reduxMessage){
-        navigate('/home', {state: {reduxMessage}});
-      }
+      dispatch(signup(true));
     }
     } catch (error) {
       console.error('Error fetching during signup:', error);

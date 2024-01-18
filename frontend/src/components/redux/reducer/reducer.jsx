@@ -1,20 +1,24 @@
-import * as actions from '../action/actionType'
-
-export function reducer(state = {}, action){
-    if(action.type === actions.SIGN_UP){
-        return {
-            message: 'Registration successful'
-            }
-        
-    }else if(action.type === actions.SIGN_IN){
-        return{
-            message: 'Login successful'
-        }
-    }else if(action.type === actions.SIGN_OUT){
-        return {
-            message: 'Logout successful'
-        }
-    }else{
-        return state;
-    }
+import {createSlice} from '@reduxjs/toolkit'
+const initialState = {
+  isLoggedIn:false,
+  value: '',
 }
+
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setLoginStatus: (state,actions) => {
+      state.value = "Login successful"
+      state.isLoggedIn = actions.payload;
+    },
+    signup: (state,actions) => {
+      state.value = "Registration successful"
+      state.isLoggedIn = actions.payload;
+    },
+  },
+})
+
+export const { signup, setLoginStatus } = authSlice.actions
+
+export default authSlice.reducer
