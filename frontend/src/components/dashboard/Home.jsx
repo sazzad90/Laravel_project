@@ -6,6 +6,7 @@ import TopSnackbar from '../utilities/SnackBar';
 import { useLocation } from 'react-router-dom';
 import UserTable from './UserTable';
 import axios from 'axios';
+import StoryLayout from './story/StoryLayout';
 
 function Home() {
   const [userTable, setUserTable] = useState(null);
@@ -40,10 +41,9 @@ function Home() {
   return (
     <div>
       <NavigationBar/>
+      <StoryLayout/>
       {message &&  <TopSnackbar message ={message}/> }
-      {userTable &&  <UserTable data = {userTable}/> }
-
-      
+      {/* {userTable &&  <UserTable data = {userTable}/> } */}
     </div>
   )
 }
