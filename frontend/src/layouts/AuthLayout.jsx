@@ -1,23 +1,23 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { useEffect } from 'react';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function AuthLayout() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const currentUserLoggedInStatus = useSelector((state) => state.auth.isLoggedIn);
-    const dispatch = useDispatch();
+  const currentUserLoggedInStatus = useSelector(
+    (state) => state.auth.isLoggedIn
+  );
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (currentUserLoggedInStatus == true) {
-      navigate('/home');
-    }
-    // else{
-    //     navigate('/signin')
-    // }
-  }, [currentUserLoggedInStatus]);
+  useEffect(()=>{
+      const token = localStorage.getItem('token');
+      if(token){
+        navigate("/home")
+      }
+  },[currentUserLoggedInStatus]);
 
   return (
     <div>

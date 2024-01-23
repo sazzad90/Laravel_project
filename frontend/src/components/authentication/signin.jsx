@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoginStatus } from "../redux/reducer/reducer";
+import { setLoginStatus, setResetMessage } from "../redux/reducer/reducer";
 
 const defaultTheme = createTheme();
 
@@ -23,13 +23,17 @@ export default function Signin() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const statusMessage = useSelector((state) => state.auth.value);
+
   const dispatch = useDispatch();
 
-  React.useEffect(()=>{
-    if(isLoggedIn == true){
-      navigate('/home');
+  React.useEffect(() => {
+    if (isLoggedIn == true) {
+      console.log("status message in signin: ", statusMessage);
+
+      navigate("/home");
     }
-  },[isLoggedIn]);
+  }, [isLoggedIn]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,8 +55,10 @@ export default function Signin() {
 
       const token = response.data.token;
       localStorage.setItem("token", token);
+
       if (localStorage.getItem("token")) {
         dispatch(setLoginStatus(true));
+        dispatch(setResetMessage("Login successful"));
       }
     } catch (error) {
       console.error("Error fetching during signin:", error);

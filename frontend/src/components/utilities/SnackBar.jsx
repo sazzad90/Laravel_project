@@ -4,15 +4,14 @@ import Snackbar from '@mui/material/Snackbar';
 import { SnackbarContent } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { useSelector, useDispatch } from 'react-redux'
-import { reset } from '../redux/reducer/reducer'
+import { setResetMessage } from '../redux/reducer/reducer'
 import { setLoginStatus } from "../redux/reducer/reducer";
 
-export default function TopSnackbar(props) {
+export default function TopSnackbar() {
   const reduxMessage = useSelector((state) => state.auth.value);
   const dispatch = useDispatch();
 
-  const message = props.message;
-
+  console.log('message from snackbar: ', reduxMessage);
   const [state, setState] = React.useState({
     open: true,
     vertical: 'top',
@@ -20,7 +19,7 @@ export default function TopSnackbar(props) {
   });
 
   const handleClose = () => {
-    dispatch(reset(''));
+    dispatch(setResetMessage(''));
     console.log('here: ', reduxMessage);
     setState({ ...state, open: false });
   };
@@ -37,7 +36,7 @@ export default function TopSnackbar(props) {
             style={{color:green}}
           >     
             <SnackbarContent style={{ backgroundColor:'green',justifyContent:'center'}}
-                message={message}
+                message={reduxMessage}
             />
       </Snackbar>
     </Box>
