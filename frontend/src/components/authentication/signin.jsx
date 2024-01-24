@@ -15,28 +15,29 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setLoginStatus, setResetMessage } from "../redux/reducer/reducer";
+import { setLoginStatus, setResetMessage, setLoadingStatus } from "../../redux/reducer/reducer";
 
 const defaultTheme = createTheme();
 
 export default function Signin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const statusMessage = useSelector((state) => state.auth.value);
+  const loadingStatus = useSelector((state) => state.auth.isLoading);
 
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    if (isLoggedIn == true) {
-      console.log("status message in signin: ", statusMessage);
-
-      navigate("/home");
-    }
-  }, [isLoggedIn]);
+  // React.useEffect(() => {
+  //   if (isLoggedIn == true) {
+  //     console.log("status message in signin: ", statusMessage);
+  //     navigate("/home");
+  //   }
+  // }, [isLoggedIn]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    dispatch(setLoadingStatus(true));
+
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
@@ -51,16 +52,21 @@ export default function Signin() {
         email: email,
         password: password,
       });
-      console.log("response", response.data);
+      console.log("login response", response.data);
 
       const token = response.data.token;
       localStorage.setItem("token", token);
 
-      if (localStorage.getItem("token")) {
+      if (localStorage.getItem("token") !== 'undefined') {
         dispatch(setLoginStatus(true));
         dispatch(setResetMessage("Login successful"));
       }
+      else{
+        dispatch(setLoadingStatus(false));
+        console.log('login status: user unauthenticated');
+      }
     } catch (error) {
+      dispatch(setLoadingStatus(false));
       console.error("Error fetching during signin:", error);
     }
   };

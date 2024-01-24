@@ -15,7 +15,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { signup, setResetMessage } from "../redux/reducer/reducer";
+import { signup, setResetMessage, setLoadingStatus } from "../../redux/reducer/reducer";
 
 const defaultTheme = createTheme();
 
@@ -24,17 +24,21 @@ export default function Signup() {
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const message = useSelector((state) => state.auth.value);
+  const loadingStatus = useSelector((state) => state.auth.isLoading);
+
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/home");
-    }
-  }, [isLoggedIn]);
+  // React.useEffect(() => {
+  //   if (isLoggedIn) {
+  //     navigate("/home");
+  //   }
+  // }, [isLoggedIn]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    dispatch(setLoadingStatus(true));
 
+    const data = new FormData(event.currentTarget);
     const name = data.get("name");
     const email = data.get("email");
     const password = data.get("password");
@@ -55,11 +59,16 @@ export default function Signup() {
       const token = response.data.token;
       localStorage.setItem("token", token);
 
-      if (localStorage.getItem("token")) {
+      if (localStorage.getItem("token") !== 'undefined') {
         dispatch(signup(true));
         dispatch(setResetMessage("Registration successful"));
       }
+      else{
+        dispatch(setLoadingStatus(false));
+        console.log('register status: user unauthenticated');
+      }
     } catch (error) {
+      dispatch(setLoadingStatus(false));
       console.error("Error fetching during signup:", error);
     }
   };

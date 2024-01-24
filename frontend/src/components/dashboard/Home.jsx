@@ -2,14 +2,19 @@ import React, { useEffect } from 'react'
 import NavigationBar from './ResponsiveNavbar'
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import TopSnackbar from '../utilities/SnackBar';
+import TopSnackbar from '../../utilities/SnackBar';
 import UserTable from './UserTable';
 import axios from 'axios';
 import StoryLayout from './story/StoryLayout';
+import ThemeContext from "../../context/themeContext/ThemeContext ";
 
 function Home() {
   const [userTable, setUserTable] = useState(null);
   const statusMessage = useSelector((state) => state.auth.value);
+
+  const themeContext = React.useContext(ThemeContext);
+  const {theme, themeStyles} = themeContext;
+  const { background, navColor,logoColor,buttonColor,textColor} = themeStyles[theme];
 
   useEffect(()=>{
     const loadUserData =async()=>{
@@ -39,12 +44,15 @@ function Home() {
   },[]);
 
   return (
-    <div>
+    <div  style={{ height: '100vh',backgroundColor: background}} >
+      <br/>
       <NavigationBar/>
-      <StoryLayout/>
+      <br/>
+       <StoryLayout/>
       {statusMessage &&  <TopSnackbar/> }
       {/* {userTable &&  <UserTable data = {userTable}/> } */}
     </div>
+
   )
 }
 

@@ -115,7 +115,6 @@ const StoryLayout = () => {
     <div style={{
       width: '195vh',
       height: '40vh',
-      margin: 'auto',
     }
     }>
       <Slider {...settings}>

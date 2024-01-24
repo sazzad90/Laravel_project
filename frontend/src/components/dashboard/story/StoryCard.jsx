@@ -1,8 +1,14 @@
 import React from "react";
 import "./StoryCard.css";
-
+import ThemeContext from "../../../context/themeContext/ThemeContext ";
+import { useContext } from "react";
 const StoryCard = (props) => {
   const { bgImage, quotationImage, text, videoLink } = props.stories;
+
+  const themeContext = React.useContext(ThemeContext);
+  const {theme, themeStyles} = themeContext;
+  const { background, navColor,logoColor,buttonColor,textColor} = themeStyles[theme]
+
   console.log("text: ", text);
   console.log("link: ", videoLink);
   return (
@@ -44,7 +50,7 @@ const StoryCard = (props) => {
       </div>
       <div
           className="text"
-          style={{ backgroundColor: 'light-grey', color: "black" ,borderRadius: "10px",
+          style={{ backgroundColor: 'light-grey', color: textColor ,borderRadius: "10px",
         }}
         >
           <p style={{ textAlign: "center", fontFamily: 'monospace', fontSize: '20px', fontWeight:'bold' }}>{text}</p>

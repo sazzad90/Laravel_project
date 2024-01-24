@@ -13,10 +13,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
-import { setLoginStatus } from "../redux/reducer/reducer";
+import { setLoginStatus } from "../../redux/reducer/reducer";
 import { useDispatch, useSelector } from "react-redux";
+import ThemeMode from "../../utilities/ThemeMode";
+import ThemeContext from "../../context/themeContext/ThemeContext ";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Home", "Podcast", "Blog"];
 
 function NavigationBar() {
   const navigate = useNavigate();
@@ -24,6 +26,10 @@ function NavigationBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const loggedInStatus = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+
+  const themeContext = React.useContext(ThemeContext);
+  const {theme, themeStyles} = themeContext;
+  const { background, navColor,logoColor,buttonColor,textColor} = themeStyles[theme];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -48,7 +54,7 @@ function NavigationBar() {
   };
 
   return (
-    <AppBar position="sticky" style={{backgroundColor: 'black'}}>
+    <AppBar position="sticky" style={{backgroundColor: navColor}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -63,7 +69,7 @@ function NavigationBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "orange",
+              color: 'inherit',
               textDecoration: "none",
             }}
           >
@@ -100,7 +106,7 @@ function NavigationBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem  key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -128,19 +134,20 @@ function NavigationBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
+                className="active"
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", fontWeight: 'semi-bold' }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-
+          <ThemeMode/>
           <Box sx={{ flexGrow: 0 }} >
             <Tooltip title="log out" >
-              <IconButton onClick={handleLogout} sx={{ p: 0, backgroundColor: '#ff0000' }}>
-                <Avatar variant="plain" />
+              <IconButton onClick={handleLogout} sx={{ p: 0}}>
+                <Avatar variant="plain" style={{color: 'black', backgroundColor: logoColor }}/>
               </IconButton>
             </Tooltip>
           </Box>
