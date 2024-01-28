@@ -16,25 +16,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoginStatus, setResetMessage, setLoadingStatus } from "../../redux/reducer/reducer";
+import TopSnackbar from "../../utilities/SnackBar";
 
 const defaultTheme = createTheme();
 
 export default function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const statusMessage = useSelector((state) => state.auth.value);
   const loadingStatus = useSelector((state) => state.auth.isLoading);
 
-  // React.useEffect(() => {
-  //   if (isLoggedIn == true) {
-  //     console.log("status message in signin: ", statusMessage);
-  //     navigate("/home");
-  //   }
-  // }, [isLoggedIn]);
+  const [status, setStatus] = React.useState(true);
 
-  const handleSubmit = async (event) => {
+   const handleSubmit = async (event) => {
     event.preventDefault();
     dispatch(setLoadingStatus(true));
 
@@ -58,11 +53,17 @@ export default function Signin() {
       localStorage.setItem("token", token);
 
       if (localStorage.getItem("token") !== 'undefined') {
+        localStorage.setItem("email", email);
+
+        setStatus(false);
         dispatch(setLoginStatus(true));
         dispatch(setResetMessage("Login successful"));
+        console.log('status here: ', status);
       }
       else{
         dispatch(setLoadingStatus(false));
+        dispatch(setResetMessage("User unauthenticated"));
+
         console.log('login status: user unauthenticated');
       }
     } catch (error) {
@@ -72,6 +73,9 @@ export default function Signin() {
   };
 
   return (
+    <>
+    {statusMessage &&  status && <TopSnackbar value = {'red'}/> }
+
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
@@ -158,5 +162,7 @@ export default function Signin() {
         </Grid>
       </Grid>
     </ThemeProvider>
+    </>
+
   );
 }

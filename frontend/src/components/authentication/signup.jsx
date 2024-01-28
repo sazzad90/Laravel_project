@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { signup, setResetMessage, setLoadingStatus } from "../../redux/reducer/reducer";
+import TopSnackbar from "../../utilities/SnackBar";
 
 const defaultTheme = createTheme();
 
@@ -23,16 +24,12 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const message = useSelector((state) => state.auth.value);
+  const statusMessage = useSelector((state) => state.auth.value);
   const loadingStatus = useSelector((state) => state.auth.isLoading);
 
-  const dispatch = useDispatch();
+  const [status, setStatus] = React.useState(true);
 
-  // React.useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate("/home");
-  //   }
-  // }, [isLoggedIn]);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -60,11 +57,14 @@ export default function Signup() {
       localStorage.setItem("token", token);
 
       if (localStorage.getItem("token") !== 'undefined') {
+        setStatus(false);
         dispatch(signup(true));
         dispatch(setResetMessage("Registration successful"));
       }
       else{
         dispatch(setLoadingStatus(false));
+        dispatch(setResetMessage("Email already in use"));
+
         console.log('register status: user unauthenticated');
       }
     } catch (error) {
@@ -75,6 +75,8 @@ export default function Signup() {
 
   return (
     <>
+      {statusMessage && status && <TopSnackbar value = {'red'}/> }
+
       <ThemeProvider theme={defaultTheme}>
         <Grid container component="main" sx={{ height: "100vh" }}>
           <CssBaseline />

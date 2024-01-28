@@ -44,12 +44,12 @@ function Home() {
   },[]);
 
   return (
-    <div  style={{ height: '100vh',backgroundColor: background}} >
-      <br/>
-      <NavigationBar/>
-      <br/>
-       <StoryLayout/>
-      {statusMessage &&  <TopSnackbar/> }
+    <div className={'App'} style={{ height: '100vh',backgroundColor: background}} >
+    <br/>
+    <NavigationBar/>
+    <br/>
+      <StoryLayout/>
+      {statusMessage &&  <TopSnackbar value = {'green'}/> }
       {/* {userTable &&  <UserTable data = {userTable}/> } */}
     </div>
 

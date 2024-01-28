@@ -5,6 +5,9 @@ import Home from "../components/dashboard/Home";
 import MainLayout from "../layouts/MainLayout";
 import HomeLayout from "../layouts/HomeLayout";
 import AuthLayout from "../layouts/AuthLayout";
+import ProfileLayout from "../layouts/ProfileLayout";
+import Profile from "../components/profile/Profile";
+import EditProfile from "../components/profile/EditProfile";
 
 const RouteList = () => {
   return (
@@ -17,6 +20,10 @@ const RouteList = () => {
           </Route>
           <Route element={<HomeLayout />}>
             <Route path="/home" element={<Home />}></Route>
+          </Route>
+          <Route element={<ProfileLayout />}>
+            <Route path="/profile" element={<Profile/>}></Route>
+            <Route path="/editProfile" element={<EditProfile/>}></Route>
           </Route>
         </Routes>
       </MainLayout>

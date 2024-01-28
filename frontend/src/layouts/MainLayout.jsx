@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import Loader from '../utilities/Loader'
+
 const MainLayout = ({ children }) => {
   const loadingStatus = useSelector((state) => state.auth.isLoading);
 
@@ -9,11 +10,9 @@ const MainLayout = ({ children }) => {
 
   return (
     <>
-      <div className={'App'} >
-        <>
+      <div>
         <>{children}</>
         {loadingStatus ? <Loader/> : null}
-        </>
       </div>
     </>
   );

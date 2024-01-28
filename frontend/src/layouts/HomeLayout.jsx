@@ -15,10 +15,12 @@ export default function HomeLayout() {
 
     useEffect(()=>{
         const token = localStorage.getItem('token');
+ 
         if(token && token !== 'undefined'){
 
         }else{
           dispatch(setLoginStatus(false));
+          console.log('logout status: ', loggedInStatus);
           navigate("/signin");
         }
         dispatch(setLoadingStatus(false));

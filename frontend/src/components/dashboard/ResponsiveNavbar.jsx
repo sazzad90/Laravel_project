@@ -17,7 +17,7 @@ import { setLoginStatus } from "../../redux/reducer/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import ThemeMode from "../../utilities/ThemeMode";
 import ThemeContext from "../../context/themeContext/ThemeContext ";
-
+import { useState } from "react";
 const pages = ["Home", "Podcast", "Blog"];
 
 function NavigationBar() {
@@ -28,8 +28,19 @@ function NavigationBar() {
   const dispatch = useDispatch();
 
   const themeContext = React.useContext(ThemeContext);
-  const {theme, themeStyles} = themeContext;
-  const { background, navColor,logoColor,buttonColor,textColor} = themeStyles[theme];
+  const { theme, toggleTheme, themeStyles } = themeContext;
+  const { background, navColor, logoColor, buttonColor, textColor } =
+    themeStyles[theme];
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -38,23 +49,27 @@ function NavigationBar() {
   const handleLogout = async (event) => {
     try {
       localStorage.removeItem("token");
+      localStorage.removeItem("theme");
+      localStorage.removeItem("email");
+
       dispatch(setLoginStatus(false));
       console.log("status: ", loggedInStatus);
     } catch (error) {
       console.error("Error fetching todos:", error);
     }
+    handleMenuClose();
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleProfile = () => {
+    navigate('/profile');
+    handleMenuClose();
   };
 
   return (
-    <AppBar position="sticky" style={{backgroundColor: navColor}}>
+    <AppBar
+      position="sticky"
+      style={{ backgroundColor: navColor, marginRight: "40px" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -69,7 +84,7 @@ function NavigationBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: 'inherit',
+              color: "inherit",
               textDecoration: "none",
             }}
           >
@@ -100,13 +115,13 @@ function NavigationBar() {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              // onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
-                <MenuItem  key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -136,20 +151,43 @@ function NavigationBar() {
               <Button
                 className="active"
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block", fontWeight: 'semi-bold' }}
+                // onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontWeight: "semi-bold",
+                }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-          <ThemeMode/>
-          <Box sx={{ flexGrow: 0 }} >
+          <ThemeMode />
+          {/* <Box sx={{ flexGrow: 0 }} >
             <Tooltip title="log out" >
               <IconButton onClick={handleLogout} sx={{ p: 0}}>
                 <Avatar variant="plain" style={{color: 'black', backgroundColor: logoColor }}/>
               </IconButton>
             </Tooltip>
+          </Box> */}
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton onClick={handleMenuOpen} sx={{ p: 0 }}>
+              <Avatar
+                variant="plain"
+                style={{ color: "black", backgroundColor: logoColor }}
+              />
+            </IconButton>
+
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleProfile} sx={{width: '80px'}}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </Container>

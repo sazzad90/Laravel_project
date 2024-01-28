@@ -3,11 +3,10 @@ import { useState } from "react";
 import ThemeContext from "./ThemeContext ";
 
 const ThemeProvider = ({ children }) => {
-    // const prevTheme = localStorage.getItem('theme') !== null ? localStorage.getItem('theme') : 'light';
     const [theme, setTheme] = useState(localStorage.getItem("theme")??'light');
-    console.log('after reload: ', theme);
 
     const toggleTheme = () => {
+
       setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
       localStorage.setItem('theme',theme=== 'light' ? 'dark' : 'light');    
 
@@ -20,13 +19,16 @@ const ThemeProvider = ({ children }) => {
         logoColor: '#00CC00',
         buttonColor: '#0066CC',
         textColor: '#000',
+        componentColor: '#fff',
+        shadowColor: '#fff'
       },
       dark: {
         background: '#000000',
-        navColor: '#302A28',
+        navColor: '#303030',
         logoColor: '#FF8000',
-        buttonColor: '#CA2F00',
+        buttonColor: '#FF8000',
         textColor: '#fff',
+        componentColor: '#303030',
       },
     };
   

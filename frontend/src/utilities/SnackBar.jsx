@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setResetMessage } from '../redux/reducer/reducer'
 import { setLoginStatus } from "../redux/reducer/reducer";
 
-export default function TopSnackbar() {
+export default function TopSnackbar({value}) {
   const reduxMessage = useSelector((state) => state.auth.value);
   const dispatch = useDispatch();
 
@@ -33,9 +33,8 @@ export default function TopSnackbar() {
             anchorOrigin={{ vertical, horizontal }}
             open={open}
             key={vertical + horizontal}
-            style={{color:green}}
           >     
-            <SnackbarContent style={{ backgroundColor:'green',justifyContent:'center'}}
+            <SnackbarContent style={{ backgroundColor:value,justifyContent:'center'}}
                 message={reduxMessage}
             />
       </Snackbar>
